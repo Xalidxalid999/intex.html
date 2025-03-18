@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Şəkil Çək</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        #video {
+            border: 2px solid #000;
+            width: 320px;
+            height: 240px;
+            margin-bottom: 20px;
+        }
+        #snap {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+        #snap:hover {
+            background-color: #45a049;
+        }
+        #canvas {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Telefon ilə Şəkil Çək</h1>
+    <video id="video" autoplay></video>
+    <button id="snap">Şəkil Çək</button>
+    <canvas id="canvas" width="320" height="240"></canvas>
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const snapButton = document.getElementById('snap');
+        const context = canvas.getContext('2d');
+
+        // Kameranı açmaq
+        navigator.mediaDevices.getUserMedia({ video: true })
+            .then((stream) => {
+                video.srcObject = stream;
+            })
+            .catch((err) => {
+                console.error("Kamera açıla bilmədi:", err);
+            });
+
+        // Şəkil çəkmək
+        snapButton.addEventListener('click', () => {
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            const imageUrl = canvas.toDataURL('image/png');
+            console.log("Çəkilən şəkil:", imageUrl); // Şəkilin URL-ini konsola yazır
+        });
+    </script>
+</body>
+</html>
